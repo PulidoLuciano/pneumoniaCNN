@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clasificador de Rayos X</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      color: #fff;
+    }
+
+    .container {
+      background-color: rgba(255,255,255,0.05);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.4);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    input[type="file"] {
+      margin: 1rem 0;
+      padding: 0.5rem;
+      border-radius: 8px;
+      background-color: #1f2e3a;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button {
+      background: #00c9ff;
+      background: linear-gradient(to right, #92fe9d, #00c9ff);
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #00c9ff, #92fe9d);
+    }
+
+    #preview {
+      margin-top: 1rem;
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    #result {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    footer {
+        margin-top: 2rem;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #aaa;
+        border-top: 1px solid #444;
+        padding-top: 1rem;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Diagnóstico de Neumonía</h1>
+    <h3>Inteligencia Artificial - UTN FRT</h3>
+    <input type="file" id="imageInput" accept="image/*"/>
+    <img id="preview" src="#" alt="Previsualización" style="display: none;" />
+    <button onclick="predict()">Enviar y Clasificar</button>
+    <div id="result"></div>
+    <div id="label"></div>
+  </div>
+
+  <footer style="margin-top: 2rem; text-align: center; font-size: 0.9rem; color: #ccc;">
+    Proyecto realizado por: <strong>Luciano Nicolás Pulido</strong>, <strong>Moisés Salem</strong> y <strong>Joaquín Sarmiento</strong>
+  </footer>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const preview = document.getElementById('preview');
+    const resultDiv = document.getElementById('result');
+    const labelDiv = document.getElementById('label');
+    imageInput.onchange = () => {
+      const file = imageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          preview.src = reader.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    async function predict() {
+      const file = imageInput.files[0];
+      if (!file) {
+        alert('Por favor selecciona una imagen.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      resultDiv.innerText = 'Clasificando...';
+
+      try {
+        const response = await fetch('http://localhost:5000/predict', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        resultDiv.innerText = `Resultado: ${result.prediction}`;
+        labelDiv.innerText = `Label: ${result.label}`;
+      } catch (err) {
+        resultDiv.innerText = 'Error al clasificar.';
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
+
