@@ -9,7 +9,7 @@ from tensorflow.keras.applications.vgg16 import preprocess_input as vgg_preproce
 app = Flask(__name__)
 
 # Cargar el modelo (ajustá la ruta a tu archivo)
-model = tf.keras.models.load_model('best_model/vgg_model_finetuned.keras')
+model = tf.keras.models.load_model('best_model/vgg_model_finetuned.keras') # Cambiar acá el modelo que se va a usar
 
 IMG_SIZE = 224  # Ajustá según tu red
 
