@@ -1,0 +1,24 @@
+[project]
+name = "pneumoniacnn"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Luciano Pulido",email = "lucianonicolaspulido@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "keras (>=3.10.0,<4.0.0)",
+    "tensorflow (>=2.19.0,<3.0.0)",
+    "seaborn (>=0.13.2,<0.14.0)",
+    "jupyterlab (>=4.4.3,<5.0.0)",
+    "scikit-learn (>=1.7.0,<2.0.0)",
+    "opencv-python (>=4.11.0.86,<5.0.0.0)",
+    "tqdm (>=4.67.1,<5.0.0)",
+    "flask (>=3.1.1,<4.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
